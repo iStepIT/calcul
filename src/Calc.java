@@ -9,6 +9,7 @@ class Calc {
         System.out.println(parse(expression));
     }
 
+
     public static String parse(String expression) throws Exception {
         int num1;
         int num2;
@@ -16,7 +17,7 @@ class Calc {
         String result;
         boolean isRom;
         String[] operands = expression.split(" ");
-        if (operands.length !=3) throw new Exception("Должно быть 2 операнда");
+        if (operands.length !=3) throw new Exception("Должно быть 2 операнда!");
         oper = detectOperation(expression);
         if (oper == null) throw new Exception("Не верная математическая операция");
         if (Roman.isRom(operands[0]) && Roman.isRom(operands[2])) {
