@@ -15,21 +15,21 @@ class Calc {
         String oper;
         String result;
         boolean isRom;
-        String[] operands = expression.split("[+\\-*/]");
-        if (operands.length !=2) throw new Exception("Должно быть 2 операнда");
+        String[] operands = expression.split(" ");
+        if (operands.length !=3) throw new Exception("Должно быть 2 операнда");
         oper = detectOperation(expression);
         if (oper == null) throw new Exception("Не верная математическая операция");
-        if (Roman.isRom(operands[0]) && Roman.isRom(operands[1])) {
+        if (Roman.isRom(operands[0]) && Roman.isRom(operands[2])) {
 
             num1 = Roman.covertToArab(operands[0]);
-            num2 = Roman.covertToArab(operands[1]);
+            num2 = Roman.covertToArab(operands[2]);
             isRom = true;
     }
 
-    else if (!Roman.isRom(operands[0]) && !Roman.isRom(operands[1])) {
+    else if (!Roman.isRom(operands[0]) && !Roman.isRom(operands[2])) {
 
             num1 = Integer.parseInt(operands[0]);
-            num2 = Integer.parseInt(operands[1]);
+            num2 = Integer.parseInt(operands[2]);
             isRom = false;
 
         }
