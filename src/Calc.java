@@ -1,103 +1,140 @@
 import java.util.Scanner;
+// Создай консольное приложение "Строковый калькулятор". Приложение должно
+//читать из консоли введённые пользователем строки, числа, арифметические операции
+// проводимые между ними и выводить в консоль результат их выполнения.
+//
+// Требования:
+//Калькулятор умеет выполнять операции сложения строк, вычитания строки из строки, умножения строки
+// на число и деления строки на число: "a" + "b", "a" - "b", "a" * b, "a" / b.
+// Данные передаются в одну строку (смотрите пример)! Решения, в которых каждая строка, число и арифметическая
+// операция передаются с новой строки считаются неверными.
+//
+//Значения строк передаваемых в выражении выделяются двойными кавычками.
+//Результатом сложения двух строк, является строка состоящая из переданных.
+//Результатом деления строки на число n, является строка в n раз короче исходной (смотрите пример).
+//Результатом умножения стaроки на число n, является строка, в которой переданная строка повторяется ровно n раз.
+//Результатом вычитания строки из строки, является строка, в которой удалена переданная подстрока или сама
+// исходная строка, если в нее нет вхождения вычитаемой строки (смотрите пример).
+//
+//Калькулятор должен принимать на вход числа от 1 до 10 включительно, не более.
+// И строки длинной не более 10 символов. Если строка, полученная в результате работы приложения длиннее 40 символов,
+// то в выводе после 40 символа должны стоять три точки (...)
+//Калькулятор умеет работать только с целыми числами.
+//Первым аргументом выражения, подаваемого на вход, должна быть строка, при вводе пользователем
+// выражения вроде 3 + "hello", калькулятор должен выбросить исключение и прекратить свою работу.
+//
+//При вводе пользователем неподходящих чисел, строк или неподдерживаемых операций
+// (например, деление строки на строку) приложение выбрасывает исключение и завершает свою работу.
+//При вводе пользователем выражения, не соответствующего одной из вышеописанных арифметических операций,
+// приложение выбрасывает исключение и завершает свою работу.
+
+//Input:
+//            "100" + "500"
+//    Output:
+//            "100500"
+//    Input:
+//            "Hi World!" - "World!"
+//    Output:
+//            "Hi "
+//    Input:
+//            "Bye-bye!" - "World!"
+//
+//    Output:
+//            "Bye-bye!"
+//    Input:
+//            "Java" * 5
+//    Output:
+//            "JavaJavaJavaJavaJava"
+//    Input:
+//            "Example!!!" / 3
+//    Output:
+//            "Exa"
 
 class Calc {
 
     public static void main(String[] args) throws Exception {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Введите 2 числа и математическую операцию в одну строку! Цифры только арабские или римские");
-        String expression = scanner.nextLine();
-        System.out.println(parse(expression));
-    }
-
-
-    public static String parse(String expression) throws Exception {
-        int num1;
-        int num2;
-        String oper;
-        String result;
-        boolean isRom;
-        String[] operands = expression.split(" ");
-        if (operands.length !=3) throw new Exception("Должно быть 2 операнда!");
-        oper = detectOperation(expression);
-        if (oper == null) throw new Exception("Не верная математическая операция");
-        if (Roman.isRom(operands[0]) && Roman.isRom(operands[2])) {
-
-            num1 = Roman.covertToArab(operands[0]);
-            num2 = Roman.covertToArab(operands[2]);
-            isRom = true;
-    }
-
-    else if (!Roman.isRom(operands[0]) && !Roman.isRom(operands[2])) {
-
-            num1 = Integer.parseInt(operands[0]);
-            num2 = Integer.parseInt(operands[2]);
-            isRom = false;
-
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Введите строки, числа, арифметические операции");
+        String userInput = sc.nextLine();
+        int sumSym = userInput.length();
+        if (sumSym > 27) throw new Exception("Вы ввели больше положенных символов");
+        char act;
+        String[] dataUserInput;
+        if (userInput.contains("*")) {
+            dataUserInput = userInput.split(" \\* ");
+            act = '*';
         }
-        else {
-            throw new Exception("Числа должны быть в одном формате");
+        else if (userInput.contains("/")) {
+            dataUserInput = userInput.split(" / ");
+            act = '/';
         }
-        if (num1 > 10 || num2 > 10) {
-            throw new Exception("Числа должны быть от 1 до 10");
+        else if (userInput.contains("-")) {
+            dataUserInput = userInput.split(" - ");
+            act = '-';
         }
-        int arab = calc(num1, num2, oper);
-        if (isRom) {
+        else if (userInput.contains("+")) {
+            dataUserInput = userInput.split(" \\+ ");
+            act = '+';
+        }else throw new Exception("Не верный знак");
 
-            if (arab <= 0) {
-                throw new Exception("Римское число должно быть больше нуля");
+        if ((act == '*') || (act == '/')) {
+            if (dataUserInput[1].contains("\"")) throw new Exception("Делить или или умножать можно только на число");}
+            dataUserInput[0] = dataUserInput[0].replace("\"", "");
+
+        String result = "";
+            if ((act == '*')) {
+                dataUserInput[0] = dataUserInput[0].replace("\"", "");
+                int numtwo;
+                numtwo = Integer.parseInt(dataUserInput[1]);
+                if (numtwo > 10 || numtwo < 0) throw new Exception("Число должно быть от 0 до 10");
+                for (int i = 0; i < numtwo; i++)
+                    result += dataUserInput[0];
+                int resLen = result.length();
+                if (resLen<=40){
+                    System.out.print("\"" + result + "\"");
+                }
+                if (resLen>40){
+                    System.out.print("\"" + result.substring(0, 40)+ "..." + "\"");
+                }
             }
-
-            result = Roman.convertToRoman(arab);
-        } else {
-
-            result = String.valueOf(arab);
-        }
-
-        return result;
-}
-
-    static String detectOperation(String expression){
-        if (expression.contains("+")) return "+";
-        else if (expression.contains("-")) return "-";
-        else if (expression.contains("*")) return "*";
-        else if (expression.contains("/")) return "/";
-        else return null;
-    }
-
-    static int calc (int a, int b, String oper) {
-
-        if (oper.equals("+")) return a + b;
-        else if (oper.equals("-")) return a - b;
-        else if (oper.equals("*")) return a * b;
-        else return a / b;
-    }
-
-}
-
-class Roman {
-    static String[] romanArray = new String[]{"0", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX", "XXI", "XXII", "XXIII", "XXIV", "XXV", "XXVI", "XXVII", "XXVIII", "XXIX", "XXX", "XXXI", "XXXII", "XXXIII", "XXXIV", "XXXV", "XXXVI", "XXXVII", "XXXVIII", "XXXIX", "XL", "XLI", "XLII", "XLIII", "XLIV", "XLV", "XLVI", "XLVII", "XLVIII", "XLIX", "L", "LI", "LII", "LIII", "LIV", "LV", "LVI", "LVII", "LVIII", "LIX", "LX", "LXI", "LXII", "LXIII", "LXIV", "LXV", "LXVI", "LXVII", "LXVIII", "LXIX", "LXX", "LXXI", "LXXII", "LXXIII", "LXXIV", "LXXV", "LXXVI", "LXXVII", "LXXVIII", "LXXIX", "LXXX", "LXXXI", "LXXXII", "LXXXIII", "LXXXIV", "LXXXV", "LXXXVI", "LXXXVII", "LXXXVIII", "LXXXIX", "XC", "XCI", "XCII", "XCIII", "XCIV", "XCV", "XCVI", "XCVII", "XCVIII", "XCIX", "C"};
-
-
-    public static boolean isRom(String val) {
-        for (int i = 0; i < romanArray.length; i++) {
-            if (val.equals(romanArray[i])) {
-                return true;
+            if (act == '/') {
+                dataUserInput[0] = dataUserInput[0].replace("\"", "");
+                int numtwo;
+                numtwo = Integer.parseInt(dataUserInput[1]);
+                if (numtwo > 10 || numtwo < 0) throw new Exception("Число должно быть от 0 до 10");
+                int lenDel = dataUserInput[0].length()/ numtwo;
+                result = dataUserInput[0].substring(0, lenDel);
+                System.out.print("\"" + result + "\"");
             }
-        }
-        return false;
-    }
+         else
+            if ((act == '+') || (act == '-')) {
+                if (act == '+') {
+                    dataUserInput[0] = dataUserInput[0].replace("\"", "");
+                    dataUserInput[1] = dataUserInput[1].replace("\"", "");
+                    result = dataUserInput[0] + dataUserInput[1];
+                    int resLen = result.length();
+                    if (resLen<=40){
+                        System.out.print("\"" + result + "\"");
+                    }
+                    if (resLen>40){
+                        System.out.print("\"" + result.substring(0, 40)+ "..." + "\"");
+                    }
+                }
 
-    public static int covertToArab(String roman) {
-        for (int i = 0; i < romanArray.length; i++) {
-            if (roman.equals(romanArray[i])) {
-                return i;
+            if (act == '-') {
+                dataUserInput[0] = dataUserInput[0].replace("\"", "");
+                dataUserInput[1] = dataUserInput[1].replace("\"", "");
+                        int index = dataUserInput[0].indexOf(dataUserInput[1]);
+                        if (index == -1)
+                        {
+                            System.out.print("\"" + dataUserInput[0] + "\"");
+                        } else {
+                            result = dataUserInput[0].substring(0, index);
+                            result += dataUserInput[0].substring(index + dataUserInput[1].length());
+                            System.out.print("\"" + result + "\"");
+                        }
+
+                    }
+            }
             }
         }
-        return -1;
-    }
-
-    public static String convertToRoman(int arab) {
-        return romanArray[arab];
-    }
-    
-}
