@@ -27,7 +27,27 @@ import java.util.Scanner;
 // (например, деление строки на строку) приложение выбрасывает исключение и завершает свою работу.
 //При вводе пользователем выражения, не соответствующего одной из вышеописанных арифметических операций,
 // приложение выбрасывает исключение и завершает свою работу.
-
+//Input:
+//            "100" + "500"
+//    Output:
+//            "100500"
+//    Input:
+//            "Hi World!" - "World!"
+//    Output:
+//            "Hi "
+//    Input:
+//            "Bye-bye!" - "World!"
+//
+//    Output:
+//            "Bye-bye!"
+//    Input:
+//            "Java" * 5
+//    Output:
+//            "JavaJavaJavaJavaJava"
+//    Input:
+//            "Example!!!" / 3
+//    Output:
+//            "Exa"
 //Input:
 //            "100" + "500"
 //    Output:
@@ -52,6 +72,7 @@ import java.util.Scanner;
 
 class Calc {
 
+
     public static void main(String[] args) throws Exception {
         Scanner sc = new Scanner(System.in);
         System.out.println("Введите строки, числа, арифметические операции");
@@ -60,6 +81,7 @@ class Calc {
         if (sumSym > 27) throw new Exception("Вы ввели больше положенных символов");
         char act;
         String[] dataUserInput;
+        String result = "";
         if (userInput.contains("*")) {
             dataUserInput = userInput.split(" \\* ");
             act = '*';
@@ -79,62 +101,65 @@ class Calc {
 
         if ((act == '*') || (act == '/')) {
             if (dataUserInput[1].contains("\"")) throw new Exception("Делить или или умножать можно только на число");}
-            dataUserInput[0] = dataUserInput[0].replace("\"", "");
+        dataUserInput[0] = dataUserInput[0].replace("\"", "");
 
-        String result = "";
-            if ((act == '*')) {
-                dataUserInput[0] = dataUserInput[0].replace("\"", "");
-                int numtwo;
-                numtwo = Integer.parseInt(dataUserInput[1]);
-                if (numtwo > 10 || numtwo < 0) throw new Exception("Число должно быть от 0 до 10");
-                for (int i = 0; i < numtwo; i++)
-                    result += dataUserInput[0];
-                int resLen = result.length();
-                if (resLen<=40){
-                    System.out.print("\"" + result + "\"");
-                }
-                if (resLen>40){
-                    System.out.print("\"" + result.substring(0, 40)+ "..." + "\"");
-                }
-            }
-            if (act == '/') {
-                dataUserInput[0] = dataUserInput[0].replace("\"", "");
-                int numtwo;
-                numtwo = Integer.parseInt(dataUserInput[1]);
-                if (numtwo > 10 || numtwo < 0) throw new Exception("Число должно быть от 0 до 10");
-                int lenDel = dataUserInput[0].length()/ numtwo;
-                result = dataUserInput[0].substring(0, lenDel);
+        if ((act == '*')) {
+            dataUserInput[0] = dataUserInput[0].replace("\"", "");
+            int numtwo;
+            numtwo = Integer.parseInt(dataUserInput[1]);
+            if (numtwo > 10 || numtwo < 0) throw new Exception("Число должно быть от 0 до 10");
+            for (int i = 0; i < numtwo; i++)
+                result += dataUserInput[0];
+            int resLen = result.length();
+            if (resLen<=40){
                 System.out.print("\"" + result + "\"");
             }
-         else
-            if ((act == '+') || (act == '-')) {
-                if (act == '+') {
-                    dataUserInput[0] = dataUserInput[0].replace("\"", "");
-                    dataUserInput[1] = dataUserInput[1].replace("\"", "");
-                    result = dataUserInput[0] + dataUserInput[1];
-                    int resLen = result.length();
-                    if (resLen<=40){
-                        System.out.print("\"" + result + "\"");
-                    }
-                    if (resLen>40){
-                        System.out.print("\"" + result.substring(0, 40)+ "..." + "\"");
-                    }
+            if (resLen>40){
+                System.out.print("\"" + result.substring(0, 40)+ "..." + "\"");
+            }
+        }
+        if (act == '/') {
+            dataUserInput[0] = dataUserInput[0].replace("\"", "");
+            int numtwo;
+            numtwo = Integer.parseInt(dataUserInput[1]);
+            if (numtwo > 10 || numtwo < 0) throw new Exception("Число должно быть от 0 до 10");
+            int lenDel = dataUserInput[0].length()/ numtwo;
+            result = dataUserInput[0].substring(0, lenDel);
+            System.out.print("\"" + result + "\"");
+        }
+        else
+        if ((act == '+') || (act == '-')) {
+            if (act == '+') {
+                dataUserInput[0] = dataUserInput[0].replace("\"", "");
+                dataUserInput[1] = dataUserInput[1].replace("\"", "");
+                result = dataUserInput[0] + dataUserInput[1];
+                int resLen = result.length();
+                if (resLen<=40){
+                    resOut(result);
                 }
-
+                if (resLen>40){
+                    result = result.substring(0, 40)+ "...";
+                    resOut(result);
+                }
+            }
             if (act == '-') {
                 dataUserInput[0] = dataUserInput[0].replace("\"", "");
                 dataUserInput[1] = dataUserInput[1].replace("\"", "");
-                        int index = dataUserInput[0].indexOf(dataUserInput[1]);
-                        if (index == -1)
-                        {
-                            System.out.print("\"" + dataUserInput[0] + "\"");
-                        } else {
-                            result = dataUserInput[0].substring(0, index);
-                            result += dataUserInput[0].substring(index + dataUserInput[1].length());
-                            System.out.print("\"" + result + "\"");
-                        }
+                int index = dataUserInput[0].indexOf(dataUserInput[1]);
+                if (index == -1)
+                {
+                    System.out.print("\"" + dataUserInput[0] + "\"");
+                } else {
+                    result = dataUserInput[0].substring(0, index);
+                    result += dataUserInput[0].substring(index + dataUserInput[1].length());
+                    resOut(result);
 
-                    }
-            }
+                }
+
             }
         }
+    }
+    static void resOut(String result){
+        System.out.print("\"" + result + "\"");
+    }
+}
