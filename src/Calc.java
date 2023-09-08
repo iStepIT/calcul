@@ -78,7 +78,7 @@ class Calc {
         System.out.println("Введите строки, числа, арифметические операции");
         String userInput = sc.nextLine();
         int sumSym = userInput.length();
-        if (sumSym > 27) throw new Exception("Вы ввели больше положенных символов");
+        // if (sumSym > 27) throw new Exception("Вы ввели больше положенных символов");
         char act;
         String[] dataUserInput;
         String result = "";
@@ -98,6 +98,9 @@ class Calc {
             dataUserInput = userInput.split(" \\+ ");
             act = '+';
         }else throw new Exception("Не верный знак");
+        int sumSym1 = dataUserInput[0].length();
+        int sumSym2 = dataUserInput[1].length();
+        if (sumSym1 > 10 || sumSym2 > 10) throw new Exception("Строка должна быть до 10 символов");
 
         if ((act == '*') || (act == '/')) {
             if (dataUserInput[1].contains("\"")) throw new Exception("Делить или или умножать можно только на число");}
@@ -153,9 +156,7 @@ class Calc {
                     result = dataUserInput[0].substring(0, index);
                     result += dataUserInput[0].substring(index + dataUserInput[1].length());
                     resOut(result);
-
                 }
-
             }
         }
     }
